@@ -133,6 +133,7 @@ uniform vec3 uPointer;
 uniform vec3 uBounds;
 uniform sampler2D uTargetShield;
 uniform sampler2D uTargetTooth;
+uniform float uToothRotation;
 
 float rand(vec2 co) {
   return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
@@ -150,6 +151,9 @@ void main() {
 
   vec3 shieldTarget = texture2D(uTargetShield, uv).xyz;
   vec3 toothTarget = texture2D(uTargetTooth, uv).xyz;
+  // Rotate tooth target around Y axis
+  float cy = cos(uToothRotation); float sy = sin(uToothRotation);
+  toothTarget = vec3(cy * toothTarget.x + sy * toothTarget.z, toothTarget.y, -sy * toothTarget.x + cy * toothTarget.z);
   vec3 target = mix(shieldTarget, toothTarget, uMorph);
 
   vec3 toTarget = target - pos;
@@ -411,9 +415,9 @@ function buildAtlas(bounds, backGeometry, frontGeometry, arrowGeometry, toothGeo
   }
 
   const layerColor = {
-    back: new THREE.Color('#2d5a72'),
-    front: new THREE.Color('#3e86a8'),
-    arrow: new THREE.Color('#5cb0d4'),
+    back: new THREE.Color('#5a9ab8'),
+    front: new THREE.Color('#6ec0e0'),
+    arrow: new THREE.Color('#f0f8ff'),
   }
 
   const maxR = Math.max(bounds.rx, bounds.ry, bounds.rz)
@@ -581,6 +585,7 @@ function SceneContent() {
   const hoveredRef = useRef(false)
   const hoverValueRef = useRef(0)
   const waveDirectionRef = useRef(1)
+  const toothRotationRef = useRef(0)
 
   // GPU resources stored in a single ref
   const gpuResRef = useRef(null)
@@ -630,6 +635,7 @@ function SceneContent() {
     velVar.material.uniforms.uBounds = { value: new THREE.Vector3(bounds.rx, bounds.ry, bounds.rz) }
     velVar.material.uniforms.uTargetShield = { value: atlas.targetShieldTexture }
     velVar.material.uniforms.uTargetTooth = { value: atlas.targetToothTexture }
+    velVar.material.uniforms.uToothRotation = { value: 0 }
 
     const initErr = gpuCompute.init()
     if (initErr) {
@@ -798,6 +804,8 @@ function SceneContent() {
     velVar.material.uniforms.uPointer.value.copy(pointerRef.current)
     velVar.material.uniforms.uPointerSpeed.value = Math.min(pointerSpeed * 0.08, 1.0)
     velVar.material.uniforms.uShockDirection.value = waveDirectionRef.current
+    toothRotationRef.current += morphValueRef.current * 0.4 * dt
+    velVar.material.uniforms.uToothRotation.value = toothRotationRef.current
 
     gpuCompute.compute()
 
