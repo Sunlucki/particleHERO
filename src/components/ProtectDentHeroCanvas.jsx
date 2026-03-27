@@ -560,6 +560,7 @@ function SceneContent() {
   const shieldRef = useRef(null)
   const particleRigRef = useRef(null)
   const waveRef = useRef(null)
+  const cameraRigRef = useRef(null)
 
   const waveMatCoreRef = useRef(null)
   const waveMatRedRef = useRef(null)
@@ -840,10 +841,16 @@ function SceneContent() {
         if (waveMatBlueRef.current) waveMatBlueRef.current.opacity = blue
       }
     }
+    // Camera follows cursor
+    if (cameraRigRef.current) {
+      const camRotX = -state.pointer.y * 0.035
+      const camRotY = state.pointer.x * 0.045
+      easing.damp3(cameraRigRef.current.rotation, [camRotX, camRotY, 0], 0.25, dt)
+    }
   })
 
   return (
-    <>
+    <group ref={cameraRigRef}>
       <fog attach="fog" args={['#030912', 7.5, 16]} />
 
       <ambientLight intensity={0.45} />
@@ -903,7 +910,7 @@ function SceneContent() {
         <ChromaticAberration offset={chromaOffset} />
         <Vignette offset={0.3} darkness={0.6} blendFunction={BlendFunction.NORMAL} />
       </EffectComposer>
-    </>
+    </group>
   )
 }
 
