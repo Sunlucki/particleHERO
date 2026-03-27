@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="LOGO" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 2048 2048">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #27aae0;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        filter: url(#drop-shadow-1);
+      }
+
+      .cls-3 {
+        fill: url(#_Безымянный_градиент_35);
+      }
+    </style>
+    <linearGradient id="_Безымянный_градиент_35" data-name="Безымянный градиент 35" x1="584.56" y1="1600.81" x2="1347.12" y2="280.01" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#01a0de"/>
+      <stop offset="1" stop-color="#0b7ec0"/>
+    </linearGradient>
+    <filter id="drop-shadow-1" x="328" y="414" width="1732" height="1266" filterUnits="userSpaceOnUse">
+      <feOffset dx="10" dy="30"/>
+      <feGaussianBlur result="blur" stdDeviation="30"/>
+      <feFlood flood-color="#000" flood-opacity=".5"/>
+      <feComposite in2="blur" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="BACK_SHIELD" data-name="BACK SHIELD">
+    <path class="cls-1" d="M1026.54,1977.44c-.84.22-1.68.42-2.54.63-.85-.2-1.71-.41-2.55-.63C100.52,1747.3,212.02,678.45,231.96,413.43c1.9-25.25,22.39-45.11,47.68-46.18,356.33-14.95,625.48-202.32,713.51-271.71,18.12-14.28,43.65-14.28,61.8-.03,88.34,69.35,358.34,256.73,713.43,271.73,25.29,1.07,45.77,20.93,47.67,46.17,19.93,265.01,131.45,1333.87-789.51,1564.02Z"/>
+  </g>
+  <g id="FRONT_SHIELD" data-name="FRONT SHIELD">
+    <path class="cls-3" d="M1026.11,1817.07c-.7.18-1.4.35-2.11.52-.71-.17-1.42-.34-2.12-.52C198.67,1611.35,367.23,599.96,367.23,478.51c382.83,0,654.64-246.18,656.76-248.1.01-.01,273.94,248.1,656.78,248.1,0,121.45,168.56,1132.84-654.66,1338.56Z"/>
+  </g>
+  <path id="ARROW" class="cls-2" d="M1023.99,1559.18c-37.53,0-75.08-14-104.17-42.08l-465.2-449.1c-59.6-57.54-61.27-152.5-3.73-212.1,57.54-59.6,152.5-61.27,212.1-3.73l359.17,346.73,680.94-680.94c58.58-58.58,153.55-58.58,212.13,0,58.58,58.58,58.58,153.55,0,212.13l-785.16,785.16c-29.26,29.26-67.66,43.93-106.07,43.93Z"/>
+</svg>
