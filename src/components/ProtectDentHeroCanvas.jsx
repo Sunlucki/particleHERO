@@ -256,9 +256,13 @@ function useToothGeometry() {
 
     if (geometries.length === 0) return { toothGeometries: [] }
 
+    // Keep only the largest mesh (outer surface)
+    geometries.sort((a, b) => b.attributes.position.count - a.attributes.position.count)
+    const outerGeometries = [geometries[0]]
+
     // Center and scale to match shield size (~2.8 units)
     const union = new THREE.Box3()
-    geometries.forEach((g) => {
+    outerGeometries.forEach((g) => {
       g.computeBoundingBox()
       union.union(g.boundingBox)
     })
@@ -271,14 +275,17 @@ function useToothGeometry() {
     const maxDim = Math.max(size.x, size.y, size.z)
     const scaleFactor = maxDim > 0 ? 2.8 / maxDim : 1
 
-    geometries.forEach((g) => {
+    outerGeometries.forEach((g) => {
       g.translate(-center.x, -center.y, -center.z)
       g.scale(scaleFactor, scaleFactor, scaleFactor)
       g.computeBoundingBox()
       g.computeBoundingSphere()
     })
 
-    return { toothGeometries: geometries }
+    // Dispose unused geometries
+    for (let i = 1; i < geometries.length; i++) geometries[i].dispose()
+
+    return { toothGeometries: outerGeometries }
   }, [gltf])
 }
 
@@ -413,8 +420,8 @@ function buildAtlas(bounds, backGeometry, frontGeometry, arrowGeometry, toothGeo
 
   // Build tooth samplers
   const toothSamplers = toothGeometries.map((g) => makeSampler(g)).filter(Boolean)
-  const toothColor = new THREE.Color('#e8dcc8')
-  const toothGumColor = new THREE.Color('#c4988a')
+  const toothColorBase = new THREE.Color('#a8d8f0')
+  const toothColorBright = new THREE.Color('#e4f4ff')
 
   for (let i = 0; i < total; i += 1) {
     const i4 = i * 4
@@ -443,10 +450,9 @@ function buildAtlas(bounds, backGeometry, frontGeometry, arrowGeometry, toothGeo
     targetShieldData[i4 + 2] = tempPoint.z
     targetShieldData[i4 + 3] = 1
 
-    // Tooth target
+    // Tooth target — sample only outer surface
     if (toothSamplers.length > 0) {
-      const toothSampler = toothSamplers[i % toothSamplers.length]
-      toothSampler.sample(tempPoint, tempNormal)
+      toothSamplers[0].sample(tempPoint, tempNormal)
     } else {
       tempPoint.set((r2 - 0.5) * 1.2, (r3 - 0.5) * 2.0, (r4 - 0.5) * 1.2)
     }
@@ -455,9 +461,9 @@ function buildAtlas(bounds, backGeometry, frontGeometry, arrowGeometry, toothGeo
     targetToothData[i4 + 2] = tempPoint.z
     targetToothData[i4 + 3] = 1
 
-    // Tooth color: mix of ivory and gum pink based on Y position
-    const toothMix = smoothstepJS(0.3, 0.7, (tempPoint.y + 1.0) * 0.5)
-    const tc = toothColor.clone().lerp(toothGumColor, toothMix)
+    // Tooth color: blue-white gradient based on height
+    const toothMix = smoothstepJS(0.2, 0.8, (tempPoint.y + 1.4) * 0.36)
+    const tc = toothColorBright.clone().lerp(toothColorBase, toothMix)
     colorToothData[i4] = tc.r
     colorToothData[i4 + 1] = tc.g
     colorToothData[i4 + 2] = tc.b
