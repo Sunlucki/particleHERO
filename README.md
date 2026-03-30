@@ -1,16 +1,6 @@
-# ProtectDent WebGL Hero
+# WebGL Ice Hero
 
-Interactive 3D hero scene generated from the SVG logo layers:
-- `BACK_SHIELD` (back shield)
-- `FRONT_SHIELD` (front shield)
-- `ARROW` (checkmark)
-
-Included effects:
-- Cursor-driven 3D shield + arrow rotation
-- Internal particle cloud moving inside shield volume and following cursor
-- Red incoming energy particles from multiple sides
-- Impact bursts when energy particles hit the shield
-- Hover mode: stronger particle attraction and glow
+Interactive 3D hero scene with an ice shell, inner core transition, and diagnostic HUD overlays.
 
 ## Stack
 
@@ -36,12 +26,14 @@ npm run build
 
 ## Key files
 
-- `src/components/ProtectDentHeroCanvas.jsx` - ready WebGL hero component for reuse
-- `src/assets/protectdent-logo.svg` - source logo used to build 3D geometry
+- `src/components/IceHeroCanvas.jsx` - main WebGL hero canvas component
+- `src/components/IceHero.jsx` - section wrapper component
+- `src/components/DotGridOverlay.jsx` - animated diagnostic grid overlay
+- `public/models` and `public/textures` - scene assets
 
 ## Embed into your existing React hero
 
-1. Copy `src/components/ProtectDentHeroCanvas.jsx` and `src/assets/protectdent-logo.svg` to your project.
+1. Copy `src/components/IceHeroCanvas.jsx` and any required assets from `public/models` and `public/textures`.
 2. Install dependencies:
 
 ```bash
@@ -51,21 +43,13 @@ npm i three @react-three/fiber @react-three/drei @react-three/postprocessing maa
 3. Use in your hero section:
 
 ```jsx
-import ProtectDentHeroCanvas from './components/ProtectDentHeroCanvas'
+import IceHeroCanvas from './components/IceHeroCanvas'
 
 export default function Hero() {
   return (
     <section style={{ minHeight: '70vh' }}>
-      <ProtectDentHeroCanvas />
+      <IceHeroCanvas />
     </section>
   )
 }
 ```
-
-## Installed agent skills during setup
-
-Installed globally via `npx skills add`:
-- `freshtechbro/claudedesignskills@react-three-fiber`
-- `bbeierle12/skill-mcp-claude@particles-gpu`
-
-If you want these skills available in a new Codex session, restart Codex.
